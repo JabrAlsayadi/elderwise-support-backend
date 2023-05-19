@@ -61,7 +61,6 @@ create table if not exists phones (
 )
     comment 'phones numbers';
 
-
 create table if not exists hospital_check_in (
     id           bigint auto_increment comment 'id' primary key,
     hospitalName            varchar(255)          not null comment 'hospital name',
@@ -78,13 +77,54 @@ create table if not exists hospital_check_in (
     checkInAt               datetime     default CURRENT_TIMESTAMP not null comment 'checkin time',
     checkOutAt              datetime     default CURRENT_TIMESTAMP not null comment 'checkout time',
     paymentStatus           int(4) default 0      not null comment 'payment status'
-) 
+)
     comment 'hospital checkIn';
 
-/*
-    SELECT names.first_name, names.last_name, phone.phone_number, work.company, work.position 
-    FROM names
-    JOIN phone ON names.id = phone.name_id 
-    JOIN work ON names.id = work.name_id 
-    WHERE names.first_name = 'John';
-*/
+create table if not exists order_hospital_check_in (
+    id           bigint auto_increment comment 'id' primary key,
+    hospitalName            varchar(255)          not null comment 'hospital name',
+    createUser          bigint                not null comment 'create user',
+    hospitalAddress         varchar(255)          not null comment 'hospital address ',
+    medicineType            varchar(255)          not null comment 'Type: internal medicine , surger',
+    roomType                varchar(255)          not null comment 'room type: VIP - normal',
+    bedNumber               int(8)                not null comment 'bed number',
+    floorNumber             int(8)                not null comment 'floor number',
+    roomNumber              int(8)                not null comment 'room number',
+    fee                     int(10)               not null comment 'fee per day',
+    reservationAt           datetime     default CURRENT_TIMESTAMP not null comment 'reservation time',
+    updateAt                datetime     default CURRENT_TIMESTAMP not null comment 'update time',
+    checkInAt               datetime     default CURRENT_TIMESTAMP not null comment 'checkin time',
+    checkOutAt              datetime     default CURRENT_TIMESTAMP not null comment 'checkout time',
+    paymentStatus           int(4) default 0      not null comment 'payment status'
+)
+    comment 'order hospital checkIn';
+
+
+create table if not exists order_buy_medical (
+    id           bigint auto_increment comment 'id' primary key,
+    medicineName         varchar(255)          not null comment 'medicine name ',
+    createUser          bigint                not null comment 'create user',
+    medicinePrice        varchar(255)          not null comment 'medicine price ',
+    medicineCount        int(8)                not null comment 'count of order',
+    medicineType         varchar(255)          not null comment 'type: internal medicine , surgery',
+    paymentStatus        int(4) default 0      not null comment 'payment status: 0:false , 1:ture',
+    createAt             datetime     default CURRENT_TIMESTAMP not null comment 'create time',
+    updateAt             datetime     default CURRENT_TIMESTAMP not null comment 'update time'
+)
+    comment 'order buy medical';
+
+create table if not exists order_user_registration (
+    id           bigint auto_increment comment 'id' primary key,
+    hospitalName        varchar(255)          not null comment 'hospital name', 
+    createUser          bigint                not null comment 'create user',
+    hospitalAddress     varchar(255)          not null comment 'hospital address',
+    registrationType    varchar(255)          not null comment 'type: internal medicine , surgery',
+    doctorName          varchar(255)          not null comment 'doctor name',
+    fee                 int(8)                not null comment 'registration fee',
+    registrationStatus  int(4) default 0      not null comment 'registration status: 0, 1 ',
+    registrationAt      datetime   default CURRENT_TIMESTAMP not null comment 'registration time ',
+    createAt            datetime     default CURRENT_TIMESTAMP not null comment 'create time',
+    updateAt            datetime     default CURRENT_TIMESTAMP not null comment 'update time',
+    paymentStatus        int(4) default 0      not null comment 'payment status: 0:false , 1:ture'
+)
+    comment 'order medical registration';

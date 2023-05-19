@@ -8,8 +8,11 @@ const app = express();
 const users = require('./src/api/users/users.router')
 const phones = require('./src/api/phones/phones.router');
 const medicalRegistration = require('./src/api/medical/registration.router')
-const buyMedical = require('./src/api/orderMedical/order.router')
+const buyMedical = require('./src/api/buyMedical/order.router')
 const checkInHospital = require('./src/api/checkInHospital/checkIn.router')
+const orderRegistration = require('./src/api/orderRegistration/registration.router')
+const orderRoom = require('./src/api/OrderRoom/checkIn.router')
+const orderMedical = require('./src/api/OrderMedical/order.router')
 
 
 /**
@@ -25,11 +28,14 @@ app.use(express.json());
 /**
  *  Routers
 */
-app.use('/api/user', users);
-app.use('/api/phones', phones);
-app.use('/api/medical-registration', medicalRegistration);
-app.use('/api/buy-medical', buyMedical);
-app.use('/api/check-in', checkInHospital);
+app.use('/v1/user', users);
+app.use('/v1/phones', phones);
+app.use('/v1/medical-registration', medicalRegistration);
+app.use('/v1/buy-medical', buyMedical);
+app.use('/v1/check-in', checkInHospital);
+app.use('/v1/order-registration', orderRegistration);
+app.use('/v1/order-room', orderRoom);
+app.use('/v1/order-medical', orderMedical);
 
 
 /**
