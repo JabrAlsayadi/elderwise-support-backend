@@ -13,7 +13,7 @@ module.exports = {
     checkToken: (req, res, next) => {
         let token = req.get('authorization');
         if (token) {
-            token = token.slice(7)
+            token = token.slice(7);
             verify(
                 token,
                 'tokenpass123',
@@ -38,7 +38,6 @@ module.exports = {
         if (token)
             token = token.split(' ')[1];
         const DCToken = verify(token, 'tokenpass123')
-        console.log(DCToken);
         if (DCToken.result[0].userRole !== 'admin') {
             authError(res, "Access denied!");
             return;

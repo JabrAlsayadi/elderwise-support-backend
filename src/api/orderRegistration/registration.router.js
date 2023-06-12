@@ -4,7 +4,7 @@
 
 const router = require('express').Router();
 
-const { registration, registrationList, getRegistration, updateRegistration, deleteRegistration}  = require('./registration.controller');
+const { registration, registrationList, getRegistration, updateRegistration, deleteRegistration, listByUserId, getOrderByUserId}  = require('./registration.controller');
 const { checkToken } = require('../../auth/authToken');
 
 /** 
@@ -20,6 +20,20 @@ router.post('/', checkToken, registration);
  * @access Private
 */
 router.get('/', checkToken, registrationList);
+
+/**
+ * @route GET api/registration/list/:id
+ * @desc Get all medical registration by user id
+ * @access Private
+ */
+router.get('/list/:id', checkToken, listByUserId);
+
+/**
+ * @route GET api/registration/order/:id
+ * @desc Get order by user id
+ * @access Private
+*/
+router.get('/order/:id', checkToken, getOrderByUserId);
 
 /**
  * @route GET api/registration/:id

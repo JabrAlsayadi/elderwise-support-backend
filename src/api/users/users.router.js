@@ -1,7 +1,7 @@
 /**
 * @author: https://github.com/GabrSayadi
 */
-const { register, login, updateUserById, getUser, getUsers } = require('../users/users.controller');
+const { register, login, updateUserById, getUser, getUsers, passwordUpdate } = require('../users/users.controller');
 const { checkToken, authorzeAdmin } = require('../../auth/authToken')
 
 
@@ -33,7 +33,7 @@ router.get("/",checkToken, authorzeAdmin, getUsers);
  * @desc Get user by id
  * @access Private
 */
-router.get("/:id", checkToken, authorzeAdmin, getUser);
+router.get("/:id", checkToken, getUser);
 
 /**
  * @route PATCH api/users/:id

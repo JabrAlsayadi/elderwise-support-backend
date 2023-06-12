@@ -5,7 +5,16 @@
 const { EMPTY, NOT_FOUND, ERROR_RES } = require("../../Exception/exception.global")
 const { isEmpty } = require("../../utils/empty")
 const { errorRes, successRes } = require("../../utils/response/response.global")
-const { registrationMedical, getMedicalRegistration, getMedicalRegistrationById, updateMedicalRegistrationById, deleteMedicalRegistrationById } = require("./registration.service")
+const { get } = require("./registration.router")
+const { 
+    registrationMedical,
+    getMedicalRegistration,
+    getMedicalRegistrationById,
+    updateMedicalRegistrationById,
+    deleteMedicalRegistrationById,
+    getListByUserId,
+    getOrderByUserId
+} = require("./registration.service")
 
 
 module.exports = {
@@ -20,14 +29,14 @@ module.exports = {
         ? 
             registrationMedical(registrationData, (err, data) => {
                 if(err)
-                    errorRes(res, 500, err);
+                    errorRes(res, 200, err);
                 
                 if (!data)
-                    errorRes(res, 404, ERROR_RES);
+                    errorRes(res, 200, ERROR_RES);
                 successRes(res, 200, data.affectedRows);
             })
         :
-            errorRes(res, 401, EMPTY)
+            errorRes(res, 200, EMPTY)
     },
 
     /**
@@ -36,11 +45,42 @@ module.exports = {
     registrationList: (req, res) => {
         getMedicalRegistration((err, data) => {
             if(err)
-                errorRes(res, 500, err);
+                errorRes(res, 200, err);
             successRes(res, 200, data);
         });
     },
 
+    /**
+     * Get all medical registration by user id
+     */
+    listByUserId: (req, res) => {
+        const id = req.params.id;
+        isEmpty(id)
+        ?
+            getListByUserId(id, (err, data) => {
+                if(err)
+                    errorRes(res, 200, err);
+
+                if (!data.length)
+                    errorRes(res, 200, NOT_FOUND);
+                successRes(res, 200, data);
+            })
+        :
+            errorRes(res, 200, NOT_FOUND)
+    },
+
+    /**
+     * Get order by user id
+     */
+    getOrderByUserId: (req, res) => {
+        const id = req.params.id;
+        getOrderByUserId(id, (err, data) => {
+            if(err)
+                errorRes(res, 200, err);
+            successRes(res, 200, data);
+        })
+    },
+    
     /**
      *  Get medical registration by id
      */
@@ -51,14 +91,14 @@ module.exports = {
         ?
             getMedicalRegistrationById(id, (err, data) => {
                 if(err)
-                    errorRes(res, 500, err);
+                    errorRes(res, 200, err);
                 
                 if (!data.length)
-                    errorRes(res, 404, NOT_FOUND);
+                    errorRes(res, 200, NOT_FOUND);
                 successRes(res, 200, data);
             })
         :
-            errorRes(res, 401, NOT_FOUND)
+            errorRes(res, 200, NOT_FOUND)
     },
 
     /**
@@ -71,14 +111,14 @@ module.exports = {
         ?
             updateMedicalRegistrationById(updateData, (err, data) => {
                 if(err)
-                    errorRes(res, 500, err);
+                    errorRes(res, 200, err);
 
                 if (data.affectedRows === 0)
-                    errorRes(res, 404, NOT_FOUND);
+                    errorRes(res, 200, NOT_FOUND);
                 successRes(res, 200, data.affectedRows);
             })
         :
-            errorRes(res, 401, EMPTY)
+            errorRes(res, 200, EMPTY)
     },
 
     /**
@@ -91,13 +131,13 @@ module.exports = {
         ?
             deleteMedicalRegistrationById(id, (err, data) => {
                 if(err)
-                    errorRes(res, 500, err);
+                    errorRes(res, 200, err);
                 
                 if (data.affectedRows === 0)
-                    errorRes(res, 404, NOT_FOUND);
-                successRes(res, 200, data);
+                    errorRes(res, 200, NOT_FOUND);
+                successRes(res, 200, data.affectedRows);
             })
         :
-            errorRes(res, 401, EMPTY)
+            errorRes(res, 200, EMPTY)
     }
 }

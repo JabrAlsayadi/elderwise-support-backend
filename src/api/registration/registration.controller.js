@@ -5,7 +5,15 @@
 const { EMPTY, NOT_FOUND, ERROR_RES } = require("../../Exception/exception.global")
 const { isEmpty } = require("../../utils/empty")
 const { errorRes, successRes } = require("../../utils/response/response.global")
-const { registrationMedical, getMedicalRegistration, getMedicalRegistrationById, updateMedicalRegistrationById, deleteMedicalRegistrationById } = require("./registration.service")
+const { 
+    registrationMedical,
+    getMedicalRegistration, 
+    getMedicalRegistrationById,
+    updateMedicalRegistrationById,
+    deleteMedicalRegistrationById,
+    medicalDataByHospitalId,
+    listByUserId
+} = require("./registration.service")
 
 
 module.exports = {
@@ -23,11 +31,11 @@ module.exports = {
                     errorRes(res, 500, err);
                 
                 if (!data)
-                    errorRes(res, 404, ERROR_RES);
+                    errorRes(res, 200, ERROR_RES);
                 successRes(res, 200, data.affectedRows);
             })
         :
-            errorRes(res, 401, EMPTY)
+            errorRes(res, 200, EMPTY)
     },
 
     /**
@@ -35,6 +43,30 @@ module.exports = {
     */
     registrationList: (req, res) => {
         getMedicalRegistration((err, data) => {
+            if(err)
+                errorRes(res, 500, err);
+            successRes(res, 200, data);
+        });
+    },
+
+    /**
+     * Get all medical registration by hospital id
+     */
+    listByHospitalId: (req, res) => {
+        const id = req.params.id;
+        medicalDataByHospitalId(id, (err, data) => {
+            if(err)
+                errorRes(res, 500, err);
+            successRes(res, 200, data);
+        });
+    },
+
+    /**
+     * Get all medical registration by user id
+    */
+    listByUserId: (req, res) => {
+        const id = req.params.id;
+        listByUserId(id, (err, data) => {
             if(err)
                 errorRes(res, 500, err);
             successRes(res, 200, data);
@@ -54,11 +86,11 @@ module.exports = {
                     errorRes(res, 500, err);
                 
                 if (!data.length)
-                    errorRes(res, 404, NOT_FOUND);
+                    errorRes(res, 200, NOT_FOUND);
                 successRes(res, 200, data);
             })
         :
-            errorRes(res, 401, NOT_FOUND)
+            errorRes(res, 200, NOT_FOUND)
     },
 
     /**
@@ -74,11 +106,11 @@ module.exports = {
                     errorRes(res, 500, err);
 
                 if (data.affectedRows === 0)
-                    errorRes(res, 404, NOT_FOUND);
+                    errorRes(res, 200, NOT_FOUND);
                 successRes(res, 200, data.affectedRows);
             })
         :
-            errorRes(res, 401, EMPTY)
+            errorRes(res, 200, EMPTY)
     },
 
     /**
@@ -94,11 +126,11 @@ module.exports = {
                     errorRes(res, 500, err);
                 
                 if (data.affectedRows === 0)
-                    errorRes(res, 404, NOT_FOUND);
+                    errorRes(res, 200, NOT_FOUND);
                 successRes(res, 200, data);
             })
         :
-            errorRes(res, 401, EMPTY)
+            errorRes(res, 200, EMPTY)
     }
 
 }

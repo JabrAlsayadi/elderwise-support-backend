@@ -2,7 +2,7 @@
 * @author: https://github.com/GabrSayadi
 */
 
-const { createCheckIn, getAllCheckIn, getCheckInById, updateCheckInById, deleteCheckInById } = require("./checkIn.service");
+const { createCheckIn, getAllCheckIn, getCheckInById, updateCheckInById, deleteCheckInById, ordersByUserId, ordersRoomByProvId } = require("./orderRoom.service");
 const { errorRes, successRes } = require("../../utils/response/response.global");
 const { isEmpty } = require('../../utils/empty.js')
 const { NOT_FOUND, ERROR_RES, EMPTY } = require("../../Exception/exception.global");
@@ -12,7 +12,7 @@ const { NOT_FOUND, ERROR_RES, EMPTY } = require("../../Exception/exception.globa
 module.exports = {
 
     /**
-     * Check in hospital
+     * Order Room hospital
     */
     create: (req, res) => {
         const checkInData = req.body;
@@ -24,15 +24,15 @@ module.exports = {
                     errorRes(res, 500, err)
                 
                 if (!data.affectedRows)
-                    errorRes(res, 500, ERROR_RES);
+                    errorRes(res, 200, ERROR_RES);
                 successRes(res, 200, data.insertId);
             })
         :
-            errorRes(res, 500, EMPTY);
+            errorRes(res, 200, EMPTY);
     },
 
     /**
-     * Get all check in
+     * Get all Order Room
      */
     getAll: (req, res) => {
         getAllCheckIn((err, data) => {
@@ -43,7 +43,38 @@ module.exports = {
     },
 
     /**
-     * Get check in by id
+     * get all room orders by prov id
+    */
+    ordersRoomByProvId: (req, res) => {
+        const id = req.params.id;
+        ordersRoomByProvId(id, (err, data) => {
+            if (err)
+                errorRes(res, 500, err)
+            successRes(res, 200, data);
+        })
+    },
+
+    /**
+     * get all room orders by user id
+     */
+    ordersByUserId: (req, res) => {
+        const id = req.params.id;
+        isEmpty (id)
+        ?
+            ordersByUserId(id, (err, data) => {
+                if (err)
+                    errorRes(res, 500, err)
+
+                if (!data.length)
+                    errorRes(res, 200, NOT_FOUND);
+                successRes(res, 200, data);
+            })
+        :
+            errorRes(res, 200, EMPTY);
+    },
+    
+    /**
+     * Get Order Room by id
      */
     getById: (req, res) => {
         const id = req.params.id;
@@ -54,19 +85,18 @@ module.exports = {
                     errorRes(res, 500, err)
                 
                 if (!data.length)
-                    errorRes(res, 500, NOT_FOUND);
+                    errorRes(res, 200, NOT_FOUND);
                 successRes(res, 200, data);
             })
         : 
-            errorRes(res, 500, EMPTY);
+            errorRes(res, 200, EMPTY);
     },
 
     /**
-     * Update check in by id
+     * Update Order Room by id
      */
     updateById: (req, res) => {
         const checkInData = req.body;
-
         isEmpty (checkInData)
         ?
             updateCheckInById(checkInData, (err, data) => {
@@ -74,15 +104,15 @@ module.exports = {
                     errorRes(res, 500, err)
                 
                 if (data.affectedRows === 0)
-                    errorRes(res, 500, NOT_FOUND);
+                    errorRes(res, 200, NOT_FOUND);
                 successRes(res, 200, data.affectedRows);
             })
         : 
-            errorRes(res, 500, EMPTY);
+            errorRes(res, 200, EMPTY);
     },
 
     /**
-     * Delete check in by id
+     * Delete Order Room by id
      */
     deleteById: (req, res) => {
         const id = req.params.id;
@@ -94,11 +124,10 @@ module.exports = {
                     errorRes(res, 500, err)
                 
                 if (data.affectedRows === 0)
-                    errorRes(res, 500, NOT_FOUND);
+                    errorRes(res, 200, NOT_FOUND);
                 successRes(res, 200, data.affectedRows);
             })
         :
-            errorRes(res, 500, EMPTY);
+            errorRes(res, 200, EMPTY);
     }
-
 }

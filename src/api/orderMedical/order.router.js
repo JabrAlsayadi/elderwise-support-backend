@@ -3,7 +3,7 @@
 */
 
 const router = require('express').Router();
-const { create, getOrders, getOrder, updateOrder, deleteOrder } = require('./order.controller');
+const { create, getOrders, getOrder, updateOrder, deleteOrder, getListByUserId, ordersByProvId } = require('./order.controller');
 const { checkToken } = require('../../auth/authToken');
 
 /**
@@ -26,6 +26,19 @@ router.get('/', checkToken, getOrders);
  * @access Private
  */
 router.get('/:id', checkToken, getOrder);
+
+/**
+ * @router GET api/orderMedical/userid/:id
+ * @desc Get medical by id
+ * @access Private
+ */
+router.get('/order-prov/:id', checkToken, ordersByProvId);
+/**
+ * @router GET api/orderMedical/userid/:id
+ * @desc Get medical by id
+ * @access Private
+ */
+router.get('/owner-order/:id', checkToken, getListByUserId);
 
 /**
  * @router PATCH api/orderMedical/:id

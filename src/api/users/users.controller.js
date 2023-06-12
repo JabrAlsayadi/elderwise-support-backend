@@ -7,7 +7,8 @@ const {
     userLogin,
     updateUser,
     getUserById,
-    listUser
+    listUser,
+    updatePassword
 } = require('./users.service')
 
 /**
@@ -48,7 +49,7 @@ module.exports = {
                 successRes(res, 200, data.insertId);
             })
         :
-            errorRes(res, 500, EMPTY);
+            errorRes(res, 200, EMPTY);
     },
 
     /**
@@ -64,12 +65,12 @@ module.exports = {
                     errorRes(res, 500, ERROR_RES);
 
                 if (!data.length)
-                    errorRes(res, 401, INVALID_USER);
+                    errorRes(res, 200, INVALID_USER);
                 else
                     loginSuccess(res, 200, data);
             })
         :
-            errorRes(res, 500, EMPTY);
+            errorRes(res, 200, EMPTY);
     },
 
     /**
@@ -85,12 +86,12 @@ module.exports = {
                     errorRes(res, 500, ERROR_RES);
                 
                 if (!data)
-                    errorRes(res, 401, NOT_FOUND);
+                    errorRes(res, 200, NOT_FOUND);
                 else
                     successRes(res, 200, data.affectedRows);
             })
         :
-            errorRes(res, 500, EMPTY)
+            errorRes(res, 200, EMPTY)
     },
 
     /**
@@ -106,12 +107,12 @@ module.exports = {
                         errorRes(res, 500, ERROR_RES);
 
                     if (!data.length)
-                        errorRes(res, 401, NOT_FOUND);
+                        errorRes(res, 200, NOT_FOUND);
                     else
                         successRes(res, 200, data);
             })
         :
-            errorRes(res, 500, EMPTY)
+            errorRes(res, 200, EMPTY)
     },
 
     /**
@@ -125,5 +126,4 @@ module.exports = {
             successRes(res, 200, data)
         });
     }
-
 }

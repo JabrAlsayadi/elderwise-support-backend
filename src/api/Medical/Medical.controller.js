@@ -5,12 +5,12 @@
 const { EMPTY, NOT_FOUND, ERROR_RES } = require("../../Exception/exception.global");
 const { isEmpty } = require("../../utils/empty");
 const { errorRes, successRes } = require("../../utils/response/response.global");
-const { createOrder, getAllOrders, getOrderById, updateOrder, deleteOrder } = require("./order.service");
+const { createOrder, getAllOrders, getOrderById, updateOrder, deleteOrder, medicineListByUserId } = require("./Medical.service");
 
 module.exports = {
     
     /**
-     *  Buy medical
+     * medical
     */
     create: (req, res) => {
         const orderData = req.body;
@@ -22,11 +22,11 @@ module.exports = {
                     errorRes(res, 500, err);
                 
                 if (!data)
-                    errorRes(res, 401, ERROR_RES);
+                    errorRes(res, 200, ERROR_RES);
                 successRes(res, 200, data.affectedRows);
             })
         :
-            errorRes(res, 401, EMPTY)
+            errorRes(res, 200, EMPTY)
     },
 
     /**
@@ -34,6 +34,18 @@ module.exports = {
     */
     getOrders: (req, res) => {
         getAllOrders((err, data) => {
+            if(err)
+                errorRes(res, 500, err);
+            successRes(res, 200, data);
+        });
+    },
+
+    /**
+     * Get medical by user id
+    */
+    medicineListByUserId: (req, res) => {
+        const id = req.params.id;
+        medicineListByUserId(id, (err, data) => {
             if(err)
                 errorRes(res, 500, err);
             successRes(res, 200, data);
@@ -53,11 +65,11 @@ module.exports = {
                     errorRes(res, 500, err);
                 
                 if (!data.length)
-                    errorRes(res, 404, NOT_FOUND);
+                    errorRes(res, 200, NOT_FOUND);
                 successRes(res, 200, data);
             })
         :
-            errorRes(res, 401, EMPTY)
+            errorRes(res, 200, EMPTY)
     },
 
     /**
@@ -73,11 +85,11 @@ module.exports = {
                     errorRes(res, 500, err);
                 
                 if (data.affectedRows === 0)
-                    errorRes(res, 404, NOT_FOUND);
+                    errorRes(res, 200, NOT_FOUND);
                 successRes(res, 200, data.affectedRows);
             })
         :
-            errorRes(res, 401, EMPTY)
+            errorRes(res, 200, EMPTY)
     },
 
     /**
@@ -93,11 +105,11 @@ module.exports = {
                     errorRes(res, 500, err);
                 
                 if (data.affectedRows === 0)
-                    errorRes(res, 404, NOT_FOUND);
-                successRes(res, 200, data);
+                    errorRes(res, 200, NOT_FOUND);
+                successRes(res, 200, data.affectedRows);
             })
         :
-            errorRes(res, 401, EMPTY)
+            errorRes(res, 200, EMPTY)
     }
 
 }

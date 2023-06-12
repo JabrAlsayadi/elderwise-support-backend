@@ -72,6 +72,6 @@ module.exports = {
     listUser: callback => {
         const sql = `select * from user`;
         handleConnction(sql, [], callback);
-    }
-
+    },
+    
 };
